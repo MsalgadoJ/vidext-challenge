@@ -1,4 +1,6 @@
-import Image from 'next/image';
+import Video from 'next-video';
+import { ReactPlayerAsVideo } from '../components/ReactPlayer';
+import awesomeVideo from '/videos/awesome-video.mp4';
 
 /*
 
@@ -45,5 +47,18 @@ import Image from 'next/image';
 */
 
 export default function Home() {
-  return <main className="">VIDEXT</main>;
+  return (
+    <main className="max-w-[800px] mx-auto">
+      VIDEXT
+      <div>
+        <Video
+          src={awesomeVideo}
+          accentColor="#596946"
+          secondaryColor="#D8DEC8"
+          primaryColor="#3E1573"
+          style={{ backgroundColor: 'red' }}
+        />
+      </div>
+    </main>
+  );
 }
