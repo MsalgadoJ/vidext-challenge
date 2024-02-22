@@ -58,3 +58,9 @@ export const verificationTokens = pgTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   })
 );
+
+export const videos = pgTable('video', {
+  id: text('id').notNull().primaryKey(),
+  playCount: integer('playCount'),
+  likes: integer('likes'),
+});

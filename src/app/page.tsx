@@ -1,6 +1,16 @@
-import Video from 'next-video';
-import { ReactPlayerAsVideo } from '../components/ReactPlayer';
-import awesomeVideo from '/videos/awesome-video.mp4';
+import Video from '@/components/Video';
+import Header from '@/components/Hearder';
+
+export default function Home() {
+  return (
+    <main className="w-full bg-stone-100 min-h-screen">
+      <div className="w-5/6 sm: max-w-[800px] mx-auto border-2 border-green-600">
+        <Header />
+        <Video />
+      </div>
+    </main>
+  );
+}
 
 /*
 
@@ -45,20 +55,3 @@ import awesomeVideo from '/videos/awesome-video.mp4';
 - Fully customizable media player controls. [https://github.com/muxinc/media-chrome]
 - Good design.
 */
-
-export default function Home() {
-  return (
-    <main className="max-w-[800px] mx-auto">
-      VIDEXT
-      <div>
-        <Video
-          src={awesomeVideo}
-          accentColor="#596946"
-          secondaryColor="#D8DEC8"
-          primaryColor="#3E1573"
-          style={{ backgroundColor: 'red' }}
-        />
-      </div>
-    </main>
-  );
-}
