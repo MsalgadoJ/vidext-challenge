@@ -18,27 +18,62 @@ export const videosRouter = createTRPCRouter({
       return 'IDDEMIVIDEO';
     }),
 
-  getCurrentVideo: publicProcedure.query(({ ctx, id }) => {
-    return ctx.db.query.videos.findFirst({
-      where: eq(videos.id, id),
-    });
-  }),
+  createVideo: publicProcedure
+    .input(z.object({ videoId: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      const existingVideo = await ctx.db
+        .select()
+        .from(videos)
+        .where(eq(videos.videoId, input.videoId));
 
-  createVideo: protectedProcedure
-    // .input(z.object({ name: z.string().min(1) }))
-    .mutation(async ({ ctx, id }) => {
-      await ctx.db.insert(videos).values({
-        id: id,
+      if (existingVideo) {
+        return existingVideo;
+      }
+      const newVideo = await ctx.db.insert(videos).values({
+        videoId: input.videoId,
       });
+      return newVideo;
     }),
-  // addPlayCounts: protectedProcedure.mutation(async ({ ctx, id }) => {
-  //   const updatedVideo = await ctx.db
-  //     .update(videos)
-  //     .set({
-  //       playCount: videos.playCount + 1,
-  //     })
-  //     .where(eq(videos.id, id));
 
-  //   return updatedVideo;
-  // }),
+  incrementPlayCount: publicProcedure
+    .input(z.object({ videoId: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      const currentVideo = await ctx.db
+        .select()
+        .from(videos)
+        .where(eq(videos.videoId, input.videoId));
+
+      if (!currentVideo) {
+        throw new Error('El video no fue encontrado.');
+      }
+
+      const currentPlayCount = currentVideo[0].playCount + 1;
+
+      return await ctx.db
+        .update(videos)
+        .set({ playCount: currentPlayCount })
+        .where(eq(videos.videoId, input.videoId))
+        .returning({ updatedCount: videos.playCount });
+    }),
+
+  incrementLikesCount: publicProcedure
+    .input(z.object({ videoId: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      const currentVideo = await ctx.db
+        .select()
+        .from(videos)
+        .where(eq(videos.videoId, input.videoId));
+
+      if (!currentVideo) {
+        throw new Error('El video no fue encontrado.');
+      }
+
+      const currentLikesCount = currentVideo[0].likes + 1;
+
+      return await ctx.db
+        .update(videos)
+        .set({ likes: currentLikesCount })
+        .where(eq(videos.videoId, input.videoId))
+        .returning({ updatedLikesCount: videos.likes });
+    }),
 });

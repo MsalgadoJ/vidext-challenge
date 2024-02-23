@@ -11,11 +11,51 @@ import {
   MediaMuteButton,
 } from 'media-chrome/dist/react';
 import VideoDetails from './VideoDetails';
+import { api } from '@/app/_trpc/Provider';
+import { useEffect, useState } from 'react';
 
-export default function VideoList({ video }) {
+type Video = {
+  videoId: null;
+  playCount: number;
+  likes: number;
+};
+
+export default function VideoList({ videoId }) {
+  const [videoInfo, setVideoInfo] = useState<Video>(null);
+
+  const createVideo = api.videos.createVideo.useMutation({
+    onSuccess: (data) => {
+      setVideoInfo(videoInfo ?? data[0] ?? null);
+    },
+  });
+
+  useEffect(() => {
+    // we need to call the mutation here to avoid endless loop
+    const getVideo = createVideo.mutate({ videoId });
+  }, []);
+
+  const updateCount = api.videos.incrementPlayCount.useMutation({
+    onSuccess: (data) => {
+      setVideoInfo((prevInfo) => ({
+        ...prevInfo,
+        playCount: data[0].updatedCount,
+      }));
+    },
+  });
+
+  const updateLikes = api.videos.incrementLikesCount.useMutation({
+    onSuccess: (data) => {
+      console.log('data', data);
+      setVideoInfo((prevInfo) => ({
+        ...prevInfo,
+        likes: data[0].updatedLikesCount,
+      }));
+    },
+  });
+
   return (
     <div>
-      {video}
+      {videoId}
       <MediaController>
         <video
           slot="media"
@@ -24,7 +64,7 @@ export default function VideoList({ video }) {
           muted
           crossOrigin=""
           tabIndex={0}
-          onPlay={() => console.log('hello')}
+          onPlay={() => updateCount.mutate({ videoId })}
         />
         <MediaControlBar>
           <MediaPlayButton
@@ -40,7 +80,13 @@ export default function VideoList({ video }) {
           <MediaVolumeRange></MediaVolumeRange>
         </MediaControlBar>
       </MediaController>
-      <VideoDetails />
+
+      <VideoDetails
+        videoDetails={videoInfo}
+        updateLikes={updateLikes}
+        setVideoInfo={setVideoInfo}
+        videoId={videoId}
+      />
     </div>
   );
 }

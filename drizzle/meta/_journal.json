@@ -8,6 +8,20 @@
       "when": 1708619665826,
       "tag": "0000_tough_invaders",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1708680584317,
+      "tag": "0001_quiet_freak",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1708681024746,
+      "tag": "0002_high_puck",
+      "breakpoints": true
     }
   ]
 }

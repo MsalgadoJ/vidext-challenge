@@ -9,7 +9,7 @@ export default async function Home() {
     <main className="w-full bg-stone-100 min-h-screen">
       <div className="w-5/6 sm: max-w-[800px] mx-auto border-2 border-green-600">
         <Header />
-        <Video video={videoId} />
+        <Video videoId={videoId} />
       </div>
     </main>
   );

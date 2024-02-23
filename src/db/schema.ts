@@ -60,7 +60,7 @@ export const verificationTokens = pgTable(
 );
 
 export const videos = pgTable('video', {
-  id: text('id').notNull().primaryKey(),
-  playCount: integer('playCount').default(0),
-  likes: integer('link').default(0),
+  videoId: text('id').notNull().unique(),
+  playCount: integer('playCount').notNull().default(0),
+  likes: integer('likes').notNull().default(0),
 });
