@@ -1,16 +1,20 @@
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { SessionProvider } from 'next-auth/react';
 import { httpBatchLink } from '@trpc/client';
 import React, { useState } from 'react';
+import { createTRPCReact } from '@trpc/react-query';
+import { type AppRouter } from '@/server/api/root';
+import { transformer } from './shared';
 
-import { trpc } from './client';
+export const api = createTRPCReact<AppRouter>();
 
 export default function Provider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({}));
+
   const [trpcClient] = useState(() =>
-    trpc.createClient({
+    api.createClient({
+      transformer,
       links: [
         httpBatchLink({
           url: 'http://localhost:3000/api/trpc',
@@ -20,12 +24,10 @@ export default function Provider({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <SessionProvider>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      </SessionProvider>
-    </trpc.Provider>
+    <QueryClientProvider client={queryClient}>
+      <api.Provider client={trpcClient} queryClient={queryClient}>
+        {children}
+      </api.Provider>
+    </QueryClientProvider>
   );
 }
