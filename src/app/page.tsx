@@ -3,12 +3,13 @@ import Header from '@/components/Hearder';
 import { api } from './_trpc/server';
 
 export default async function Home() {
-  const video = await api.videos.getVideos.query();
+  const videoId = await api.videos.getVideos.query();
+
   return (
     <main className="w-full bg-stone-100 min-h-screen">
       <div className="w-5/6 sm: max-w-[800px] mx-auto border-2 border-green-600">
         <Header />
-        <Video video={video} />
+        <Video video={videoId} />
       </div>
     </main>
   );
