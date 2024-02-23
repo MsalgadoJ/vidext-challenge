@@ -1,25 +1,24 @@
-'use client';
-import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { Button } from './ui/button';
-import { signIn } from 'next-auth/react';
+import { getServerAuthSession } from '@/server/auth';
 
-export default function Header() {
-  const session = useSession();
+export default async function Header() {
+  const session = await getServerAuthSession();
+  console.log(session);
   console.log('session', session);
 
-  function renderAuth() {
-    if (session.status === 'loading') {
-      return null;
-    } else if (session.data?.user) {
-      return 'Your are logged In';
-    } else {
-      return <Button onClick={() => signIn('google')}>Sign In!</Button>;
-    }
-  }
   return (
     <div className="flex justify-between">
       <div>logo de Vidext</div>
-      <div>{renderAuth()}</div>
+      <div>
+        {' '}
+        <Link
+          href={session ? '/api/auth/signout' : '/api/auth/signin'}
+          className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
+        >
+          {session ? 'Sign out' : 'Sign in'}
+        </Link>
+      </div>
     </div>
   );
 }

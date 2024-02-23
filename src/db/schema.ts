@@ -62,5 +62,5 @@ export const verificationTokens = pgTable(
 export const videos = pgTable('video', {
   id: text('id').notNull().primaryKey(),
   playCount: integer('playCount'),
-  likes: integer('likes'),
+  likes: integer('link'),
 });

@@ -1,5 +1,4 @@
 'use client';
-import { trpc } from '@/app/_trpc/client';
 import {
   MediaController,
   MediaControlBar,
@@ -13,10 +12,10 @@ import {
 } from 'media-chrome/dist/react';
 import VideoDetails from './VideoDetails';
 
-export default function VideoList() {
+export default function VideoList({ video }) {
   return (
     <div>
-      AQUÍ DEBERÍA ESTAR MI VIDEOS 😑
+      {video}
       <MediaController>
         <video
           slot="media"
