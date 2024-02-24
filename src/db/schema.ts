@@ -4,8 +4,6 @@ import {
   text,
   primaryKey,
   integer,
-  serial,
-  uuid,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccount } from '@auth/core/adapters';
 
