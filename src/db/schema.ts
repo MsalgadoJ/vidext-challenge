@@ -4,6 +4,8 @@ import {
   text,
   primaryKey,
   integer,
+  serial,
+  uuid,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccount } from '@auth/core/adapters';
 
@@ -60,7 +62,10 @@ export const verificationTokens = pgTable(
 );
 
 export const videos = pgTable('video', {
-  id: text('id').notNull().primaryKey(),
-  playCount: integer('playCount'),
-  likes: integer('link'),
+  videoId: text('id').primaryKey(),
+  videoUrl: text('Video Url').notNull(),
+  description: text('Description').notNull(),
+  thumbnail: text('Thumbnail').notNull(),
+  playCount: integer('Play Count').notNull().default(0),
+  likesCount: integer('Likes Count').notNull().default(0),
 });

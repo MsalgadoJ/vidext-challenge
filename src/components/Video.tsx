@@ -11,27 +11,35 @@ import {
   MediaMuteButton,
 } from 'media-chrome/dist/react';
 import VideoDetails from './VideoDetails';
+import { api } from '@/app/_trpc/Provider';
+import { useEffect, useState } from 'react';
 
-export default function VideoList({ video }) {
+type Video = {
+  videoId: null;
+  playCount: number;
+  likes: number;
+};
+
+export default function Video({ videoId, url, thumbnail }) {
+  const updateCount = api.videos.incrementPlayCount.useMutation({
+    onSuccess: (data) => {
+      console.log('data', data);
+    },
+  });
   return (
     <div>
-      {video}
       <MediaController>
         <video
           slot="media"
-          src="https://stream.mux.com/DS00Spx1CV902MCtPj5WknGlR102V5HFkDe/high.mp4"
+          src={url}
+          poster={thumbnail}
           preload="auto"
           muted
           crossOrigin=""
-          tabIndex={0}
-          onPlay={() => console.log('hello')}
+          onPlay={() => console.log(updateCount.mutate({ videoId }))}
         />
         <MediaControlBar>
-          <MediaPlayButton
-            tabIndex={0}
-            arial-label="video-player"
-            role="button"
-          ></MediaPlayButton>
+          <MediaPlayButton></MediaPlayButton>
           <MediaSeekBackwardButton></MediaSeekBackwardButton>
           <MediaSeekForwardButton></MediaSeekForwardButton>
           <MediaTimeRange></MediaTimeRange>
@@ -40,7 +48,6 @@ export default function VideoList({ video }) {
           <MediaVolumeRange></MediaVolumeRange>
         </MediaControlBar>
       </MediaController>
-      <VideoDetails />
     </div>
   );
 }
