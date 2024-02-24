@@ -10,8 +10,7 @@ import { eq } from 'drizzle-orm';
 
 export const videosRouter = createTRPCRouter({
   getVideos: publicProcedure.query(({ ctx }) => {
-    const videos = ctx.db.query.videos.findMany();
-    return videos;
+    return ctx.db.query.videos.findMany();
   }),
 
   getVideo: publicProcedure
@@ -20,7 +19,6 @@ export const videosRouter = createTRPCRouter({
       return ctx.db.query.videos.findFirst({
         where: eq(videos.videoId, input.videoId),
       });
-      // return input.videoId;
     }),
 
   createVideo: publicProcedure
