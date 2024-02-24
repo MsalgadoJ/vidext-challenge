@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { Button } from './ui/button';
+import { buttonVariants } from './ui/button';
 import { getServerAuthSession } from '@/server/auth';
+import Image from 'next/image';
 
 export default async function Header() {
   const session = await getServerAuthSession();
@@ -8,13 +9,16 @@ export default async function Header() {
   console.log('session', session);
 
   return (
-    <div className="flex justify-between">
-      <div>logo de Vidext</div>
+    <div className="flex justify-between items-center border border-blue-200 mt-4">
+      <div className="flex gap-2 items-center">
+        <Image src="/videx-logo.png" alt="vidext logo" width={50} height={50} />
+        <p className="hidden">vidext</p>
+      </div>
       <div>
         {' '}
         <Link
           href={session ? '/api/auth/signout' : '/api/auth/signin'}
-          className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
+          className={buttonVariants({ variant: 'outline' })}
         >
           {session ? 'Sign out' : 'Sign in'}
         </Link>

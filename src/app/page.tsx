@@ -1,15 +1,10 @@
 import Video from '@/components/Video';
-import Header from '@/components/Hearder';
-import { api } from './_trpc/server';
 
 export default async function Home() {
-  const videoId = await api.videos.getVideos.query();
-
   return (
     <main className="w-full bg-stone-100 min-h-screen">
       <div className="w-5/6 sm: max-w-[800px] mx-auto border-2 border-green-600">
-        <Header />
-        <Video videoId={videoId} />
+        <Video videoId={'Ks-_Mh1QhMc'} />
       </div>
     </main>
   );

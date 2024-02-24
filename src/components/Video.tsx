@@ -20,58 +20,26 @@ type Video = {
   likes: number;
 };
 
-export default function VideoList({ videoId }) {
-  const [videoInfo, setVideoInfo] = useState<Video>(null);
-
-  const createVideo = api.videos.createVideo.useMutation({
-    onSuccess: (data) => {
-      setVideoInfo(videoInfo ?? data[0] ?? null);
-    },
-  });
-
-  useEffect(() => {
-    // we need to call the mutation here to avoid endless loop
-    const getVideo = createVideo.mutate({ videoId });
-  }, []);
-
+export default function Video({ videoId, url, thumbnail }) {
   const updateCount = api.videos.incrementPlayCount.useMutation({
     onSuccess: (data) => {
-      setVideoInfo((prevInfo) => ({
-        ...prevInfo,
-        playCount: data[0].updatedCount,
-      }));
-    },
-  });
-
-  const updateLikes = api.videos.incrementLikesCount.useMutation({
-    onSuccess: (data) => {
       console.log('data', data);
-      setVideoInfo((prevInfo) => ({
-        ...prevInfo,
-        likes: data[0].updatedLikesCount,
-      }));
     },
   });
-
   return (
     <div>
-      {videoId}
       <MediaController>
         <video
           slot="media"
-          src="https://stream.mux.com/DS00Spx1CV902MCtPj5WknGlR102V5HFkDe/high.mp4"
+          src={url}
+          poster={thumbnail}
           preload="auto"
           muted
           crossOrigin=""
-          tabIndex={0}
-          onPlay={() => updateCount.mutate({ videoId })}
+          onPlay={() => console.log(updateCount.mutate({ videoId }))}
         />
         <MediaControlBar>
-          <MediaPlayButton
-            tabIndex={0}
-            arial-label="video-player"
-            role="button"
-          ></MediaPlayButton>
+          <MediaPlayButton></MediaPlayButton>
           <MediaSeekBackwardButton></MediaSeekBackwardButton>
           <MediaSeekForwardButton></MediaSeekForwardButton>
           <MediaTimeRange></MediaTimeRange>
@@ -80,13 +48,6 @@ export default function VideoList({ videoId }) {
           <MediaVolumeRange></MediaVolumeRange>
         </MediaControlBar>
       </MediaController>
-
-      <VideoDetails
-        videoDetails={videoInfo}
-        updateLikes={updateLikes}
-        setVideoInfo={setVideoInfo}
-        videoId={videoId}
-      />
     </div>
   );
 }

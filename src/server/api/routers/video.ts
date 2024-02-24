@@ -8,35 +8,41 @@ import {
 import { videos } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-const BASE_URL = 'https://youtube.googleapis.com/youtube/v3/';
-const key = process.env.API_KEY;
-
 export const videosRouter = createTRPCRouter({
-  getVideos: publicProcedure
-    // .input(z.object({ text: z.string() }))
-    .query(() => {
-      return 'IDDEMIVIDEO';
+  getVideos: publicProcedure.query(({ ctx }) => {
+    const videos = ctx.db.query.videos.findMany();
+    return videos;
+  }),
+
+  getVideo: publicProcedure
+    .input(z.object({ videoId: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.videos.findFirst({
+        where: eq(videos.videoId, input.videoId),
+      });
+      // return input.videoId;
     }),
 
   createVideo: publicProcedure
-    .input(z.object({ videoId: z.string().min(1) }))
+    .input(
+      z.object({
+        videoId: z.string(),
+        videoUrl: z.string(),
+        description: z.string(),
+        thumbnail: z.string(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
-      const existingVideo = await ctx.db
-        .select()
-        .from(videos)
-        .where(eq(videos.videoId, input.videoId));
-
-      if (existingVideo) {
-        return existingVideo;
-      }
-      const newVideo = await ctx.db.insert(videos).values({
+      await ctx.db.insert(videos).values({
         videoId: input.videoId,
+        videoUrl: input.videoUrl,
+        description: input.description,
+        thumbnail: input.thumbnail,
       });
-      return newVideo;
     }),
 
   incrementPlayCount: publicProcedure
-    .input(z.object({ videoId: z.string().min(1) }))
+    .input(z.object({ videoId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const currentVideo = await ctx.db
         .select()
@@ -57,7 +63,7 @@ export const videosRouter = createTRPCRouter({
     }),
 
   incrementLikesCount: publicProcedure
-    .input(z.object({ videoId: z.string().min(1) }))
+    .input(z.object({ videoId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const currentVideo = await ctx.db
         .select()
@@ -68,12 +74,12 @@ export const videosRouter = createTRPCRouter({
         throw new Error('El video no fue encontrado.');
       }
 
-      const currentLikesCount = currentVideo[0].likes + 1;
+      const currentLikesCount = currentVideo[0].likesCount + 1;
 
       return await ctx.db
         .update(videos)
-        .set({ likes: currentLikesCount })
+        .set({ likesCount: currentLikesCount })
         .where(eq(videos.videoId, input.videoId))
-        .returning({ updatedLikesCount: videos.likes });
+        .returning({ updatedLikesCount: videos.likesCount });
     }),
 });
