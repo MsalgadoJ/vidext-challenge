@@ -17,19 +17,20 @@ export default function VideoDetails({
   });
   console.log(updateLikes);
   return (
-    <div className="flex flex-col border border-pink-600">
-      <div className="flex justify-between items-center mb-2 border border-orange-600">
+    <div className="flex flex-col text-sm text-[#38422C] lg:text-base">
+      <div className="flex justify-between items-center p-1 mb-4">
         <p>{`${playCount} views`}</p>
         <Button
           onClick={() => updateLikes.mutate({ videoId })}
           className="self-end"
+          size="sm"
         >
           {' '}
           <ThumbsUpIcon className="mr-2 h-4 w-4" /> {likesCount}
         </Button>
       </div>
-      <div className="text-sm">
-        <p className="font-bold">Description</p>
+      <div className="bg-[#D8DEC8]/20 shadow-lg rounded p-4">
+        <p className="font-bold mb-1">Description</p>
         <p>{description}</p>
       </div>
     </div>
