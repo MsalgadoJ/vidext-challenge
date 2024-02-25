@@ -4,6 +4,7 @@ import {
   text,
   primaryKey,
   integer,
+  serial,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccount } from '@auth/core/adapters';
 
@@ -66,4 +67,14 @@ export const videos = pgTable('video', {
   thumbnail: text('Thumbnail').notNull(),
   playCount: integer('Play Count').notNull().default(0),
   likesCount: integer('Likes Count').notNull().default(0),
+});
+
+export const likes = pgTable('like', {
+  id: serial('id').primaryKey(),
+  videoId: text('videoId')
+    .notNull()
+    .references(() => videos.videoId, { onDelete: 'cascade' }),
+  userId: text('userId')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
 });

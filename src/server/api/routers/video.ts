@@ -5,9 +5,10 @@ import {
   protectedProcedure,
   publicProcedure,
 } from '@/server/api/trpc';
-import { videos } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { videos, likes } from '@/db/schema';
+import { and, eq } from 'drizzle-orm';
 
+// TODO: take init endpoints to another route
 export const videosRouter = createTRPCRouter({
   getVideos: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.videos.findMany();
@@ -39,17 +40,13 @@ export const videosRouter = createTRPCRouter({
       });
     }),
 
-  incrementPlayCount: publicProcedure
+  incrementPlayCount: protectedProcedure
     .input(z.object({ videoId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const currentVideo = await ctx.db
         .select()
         .from(videos)
         .where(eq(videos.videoId, input.videoId));
-
-      if (!currentVideo) {
-        throw new Error('El video no fue encontrado.');
-      }
 
       const currentPlayCount = currentVideo[0].playCount + 1;
 
@@ -60,24 +57,43 @@ export const videosRouter = createTRPCRouter({
         .returning({ updatedCount: videos.playCount });
     }),
 
-  incrementLikesCount: publicProcedure
-    .input(z.object({ videoId: z.string() }))
+  incrementLikesCount: protectedProcedure
+    .input(z.object({ videoId: z.string(), userId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const currentVideo = await ctx.db
         .select()
         .from(videos)
         .where(eq(videos.videoId, input.videoId));
 
-      if (!currentVideo) {
-        throw new Error('El video no fue encontrado.');
+      const userLike = await ctx.db
+        .select()
+        .from(likes)
+        .where(
+          and(eq(likes.userId, input.userId), eq(likes.videoId, input.videoId))
+        );
+
+      let currentLikesCount: number;
+      let newLike;
+
+      if (userLike.length) {
+        await ctx.db.delete(likes).where(eq(likes.id, userLike[0].id));
+        currentLikesCount = currentVideo[0].likesCount - 1;
+      } else {
+        newLike = await ctx.db
+          .insert(likes)
+          .values({
+            videoId: input.videoId,
+            userId: input.userId,
+          })
+          .returning({ newLikeId: likes.id });
+        currentLikesCount = currentVideo[0].likesCount + 1;
       }
 
-      const currentLikesCount = currentVideo[0].likesCount + 1;
-
-      return await ctx.db
+      await ctx.db
         .update(videos)
         .set({ likesCount: currentLikesCount })
-        .where(eq(videos.videoId, input.videoId))
-        .returning({ updatedLikesCount: videos.likesCount });
+        .where(eq(videos.videoId, input.videoId));
+
+      return newLike;
     }),
 });
