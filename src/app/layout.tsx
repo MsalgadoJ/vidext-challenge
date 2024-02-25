@@ -4,6 +4,8 @@ import './globals.css';
 import Provider from './_trpc/Provider';
 import Header from '@/components/Hearder';
 import Footer from '@/components/Footer';
+import { Toaster } from '@/components/ui/toaster';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,13 +21,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-zinc-50 `}>
+      <body className={`${inter.className} bg-[#FAFAFA]`}>
         <Provider>
           <div className={`min-h-screen grid grid-rows-[1fr_auto]`}>
             <div className={`container max-w-[800px]`}>
               <Header />
               {children}
             </div>
+            <Toaster />
             <Footer />
           </div>
         </Provider>

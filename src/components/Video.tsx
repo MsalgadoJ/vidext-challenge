@@ -10,9 +10,8 @@ import {
   MediaSeekForwardButton,
   MediaMuteButton,
 } from 'media-chrome/dist/react';
-import VideoDetails from './VideoDetails';
 import { api } from '@/app/_trpc/Provider';
-import { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 
 type Video = {
   videoId: null;
@@ -20,14 +19,16 @@ type Video = {
   likes: number;
 };
 
-export default function Video({ videoId, url, thumbnail }) {
+export default function Video({ url, thumbnail }) {
+  const router = useRouter();
+  const { id } = useParams();
   const updateCount = api.videos.incrementPlayCount.useMutation({
-    onSuccess: (data) => {
-      console.log('data', data);
+    onSettled: () => {
+      router.refresh();
     },
   });
   return (
-    <div>
+    <div className="pb-4">
       <MediaController>
         <video
           slot="media"
@@ -36,7 +37,7 @@ export default function Video({ videoId, url, thumbnail }) {
           preload="auto"
           muted
           crossOrigin=""
-          onPlay={() => console.log(updateCount.mutate({ videoId }))}
+          onPlay={() => updateCount.mutate({ videoId: id as string })}
         />
         <MediaControlBar>
           <MediaPlayButton></MediaPlayButton>

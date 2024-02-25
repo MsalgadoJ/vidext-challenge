@@ -1,6 +1,7 @@
 import Video from '@/components/Video';
 import { api } from '@/app/_trpc/server';
 import VideoDetails from '@/components/VideoDetails';
+import { notFound } from 'next/navigation';
 
 interface TopicShowPageProps {
   params: {
@@ -8,17 +9,21 @@ interface TopicShowPageProps {
   };
 }
 
-// TODO: error when video not found
 export default async function VideoDetail({ params }: TopicShowPageProps) {
   const { id } = params;
-  const { videoId, videoUrl, description, thumbnail, playCount, likesCount } =
-    await api.videos.getVideo.query({ videoId: id });
+
+  const getVideo = await api.videos.getVideo.query({ videoId: id });
+
+  if (!getVideo) {
+    return notFound();
+  }
+  const { videoUrl, description, thumbnail, playCount, likesCount } = getVideo;
 
   return (
-    <div className="pt-4 ">
-      <Video videoId={videoId} url={videoUrl} thumbnail={thumbnail} />
+    <div className="pt-4">
+      <Video url={videoUrl} thumbnail={thumbnail} />
+
       <VideoDetails
-        videoId={videoId}
         description={description}
         likesCount={likesCount}
         playCount={playCount}
