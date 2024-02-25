@@ -15,7 +15,7 @@ export default async function VideoDetail({ params }: TopicShowPageProps) {
     await api.videos.getVideo.query({ videoId: id });
 
   return (
-    <div className="pt-4 border border-purple-600">
+    <div className="pt-4 ">
       <Video videoId={videoId} url={videoUrl} thumbnail={thumbnail} />
       <VideoDetails
         videoId={videoId}

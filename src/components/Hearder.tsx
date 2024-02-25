@@ -9,10 +9,12 @@ export default async function Header() {
   console.log('session', session);
 
   return (
-    <div className="flex justify-between items-center border border-blue-200 mt-4">
-      <div className="flex gap-2 items-center">
+    <div className="flex justify-between items-center border-b border-zinc-400 mt-4 pb-2">
+      <div className="flex gap-1 items-center">
         <Image src="/videx-logo.png" alt="vidext logo" width={50} height={50} />
-        <p className="hidden">vidext</p>
+        <p className="hidden text-[#38422C] font-bold sm:flex lg:text-lg">
+          vidext
+        </p>
       </div>
       <div>
         {' '}

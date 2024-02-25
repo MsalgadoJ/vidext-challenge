@@ -19,13 +19,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} `}>
+      <body className={`${inter.className} bg-zinc-50 `}>
         <Provider>
-          <div
-            className={`container min-h-screen grid grid-rows-[auto_1fr_auto] border-2 border-green-800`}
-          >
-            <Header />
-            {children}
+          <div className={`min-h-screen grid grid-rows-[1fr_auto]`}>
+            <div className={`container max-w-[800px]`}>
+              <Header />
+              {children}
+            </div>
             <Footer />
           </div>
         </Provider>
