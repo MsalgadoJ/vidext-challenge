@@ -34,7 +34,7 @@ export default function HeaderAuth() {
           <PopoverTrigger asChild>
             <Avatar className="avatar border-2 border-violet-950">
               <AvatarImage src={image ?? ''} />
-              <AvatarFallback>NF</AvatarFallback>
+              <AvatarFallback>NP</AvatarFallback>
             </Avatar>
           </PopoverTrigger>
           <PopoverContent className="w-50">
@@ -48,7 +48,9 @@ export default function HeaderAuth() {
   } else {
     authContent = (
       <Button
-        onClick={() => signIn('google', { callbackUrl: `/videos/${id}` })}
+        onClick={() =>
+          signIn('google', { callbackUrl: id ? `/videos/${id}` : '/' })
+        }
         variant="outline"
       >
         {'Sign in'}

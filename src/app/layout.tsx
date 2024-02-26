@@ -10,7 +10,8 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'VIDEXT - Generate videos with AI',
-  description: '',
+  description:
+    'Lleva tus comuncaciones corporativas al siguiente nivel gracias a avatares impulsados por IA. Traduce textos a más de 40 idiomas y crea sin límites.',
 };
 
 export default function RootLayout({
@@ -20,20 +21,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-[#FAFAFA]`}>
+      <body className={`${inter.className} bg-zinc-50 w-full`}>
         <Provider>
-          <div className={`min-h-screen grid grid-rows-[1fr_auto]`}>
-            <div className={`container max-w-[800px]`}>
+          <div className="w-full min-h-screen grid grid-rows-[1fr_auto]">
+            <div className="container max-w-[800px]">
               <Header />
               {children}
             </div>
-            <Toaster />
             <Footer />
+            <Toaster />
           </div>
         </Provider>
       </body>
     </html>
   );
 }
-
-//text-[#38422C]

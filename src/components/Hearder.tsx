@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import HeaderAuth from './HeaderAuth';
 import Image from 'next/image';
+import HeaderAuth from './HeaderAuth';
 
 export default function Header() {
   return (
-    <div className="flex justify-between items-center border-b border-zinc-400 mt-4 pb-2">
+    <div className="flex justify-between items-center border-b border-zinc-400 mt-4 pb-4">
       <Link href="/" className="flex gap-2 items-center">
         <Image
           src="/videx-logo.webp"

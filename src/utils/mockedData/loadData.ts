@@ -1,6 +1,7 @@
 import { api } from '@/app/_trpc/server';
+import { Video } from '../types/types';
 
-export async function loadMockData(mockedVideos) {
+export async function loadMockData(mockedVideos: Video[]) {
   for (const video of mockedVideos) {
     await api.videos.createVideo.mutate({
       videoId: video.videoId,

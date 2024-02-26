@@ -1,4 +1,6 @@
 'use client';
+import { api } from '@/app/_trpc/Provider';
+import { useRouter, useParams } from 'next/navigation';
 import {
   MediaController,
   MediaControlBar,
@@ -10,23 +12,22 @@ import {
   MediaSeekForwardButton,
   MediaMuteButton,
 } from 'media-chrome/dist/react';
-import { api } from '@/app/_trpc/Provider';
-import { useRouter, useParams } from 'next/navigation';
 
-type Video = {
-  videoId: null;
-  playCount: number;
-  likes: number;
-};
+interface VideoProps {
+  url: string;
+  thumbnail: string;
+}
 
-export default function Video({ url, thumbnail }) {
+export default function Video({ url, thumbnail }: VideoProps) {
   const router = useRouter();
   const { id } = useParams();
+
   const updateCount = api.videos.incrementPlayCount.useMutation({
     onSettled: () => {
       router.refresh();
     },
   });
+
   return (
     <div className="pb-4">
       <MediaController>
@@ -41,17 +42,17 @@ export default function Video({ url, thumbnail }) {
           tabIndex={0}
         />
         <div className="centered-controls-overlay" slot="centered-chrome">
-          <MediaSeekBackwardButton></MediaSeekBackwardButton>
+          <MediaSeekBackwardButton tabIndex={0}></MediaSeekBackwardButton>
           <MediaPlayButton tabIndex={0}></MediaPlayButton>
-          <MediaSeekForwardButton></MediaSeekForwardButton>
+          <MediaSeekForwardButton tabIndex={0}></MediaSeekForwardButton>
         </div>
         <MediaControlBar>
           <MediaPlayButton tabIndex={0}></MediaPlayButton>
-          <MediaSeekBackwardButton></MediaSeekBackwardButton>
-          <MediaSeekForwardButton></MediaSeekForwardButton>
+          <MediaSeekBackwardButton tabIndex={0}></MediaSeekBackwardButton>
+          <MediaSeekForwardButton tabIndex={0}></MediaSeekForwardButton>
           <MediaTimeRange></MediaTimeRange>
           <MediaTimeDisplay showDuration></MediaTimeDisplay>
-          <MediaMuteButton></MediaMuteButton>
+          <MediaMuteButton tabIndex={0}></MediaMuteButton>
           <MediaVolumeRange></MediaVolumeRange>
         </MediaControlBar>
       </MediaController>

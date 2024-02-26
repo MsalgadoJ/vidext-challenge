@@ -1,34 +1,35 @@
 'use client';
-import Link from 'next/link';
-import { Button, buttonVariants } from '@/components/ui/button';
-import { getServerAuthSession } from '@/server/auth';
-import { Loader2 } from 'lucide-react';
+
 import { useSession } from 'next-auth/react';
+import { Video } from '@/utils/types/types';
+import Card from './Card';
+import { Skeleton } from './ui/skeleton';
 
-export default function VideoList({ videos }) {
+interface VideoListProps {
+  videos: Video[];
+}
+
+export default function VideoList({ videos }: VideoListProps) {
   const session = useSession();
-  const LoadingButton = (id) => (
-    <Button disabled key={id}>
-      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-      Please wait
-    </Button>
-  );
 
-  const LinkButton = (id, i) => (
-    <Link
-      className={buttonVariants({
-        variant: i % 2 > 0 ? 'default' : 'secondary',
+  return (
+    <div className="flex flex-col gap-6 sm:flex-row">
+      {videos.map((video, i) => {
+        return session.status === 'loading' ? (
+          <Skeleton
+            className="h-[292px] w-[200px] rounded-xl sm:h-[300px]"
+            key={video.videoId}
+          />
+        ) : (
+          <Card
+            thumbnail={video.thumbnail}
+            title={video.title}
+            videoId={video.videoId}
+            i={i}
+            key={video.videoId}
+          />
+        );
       })}
-      href={`/videos/${id}`}
-      key={id}
-    >
-      Go to video sample #{i + 1}
-    </Link>
+    </div>
   );
-
-  return videos.map((video, i) => {
-    return session.status === 'loading'
-      ? LoadingButton(video.videoId)
-      : LinkButton(video.videoId, i);
-  });
 }

@@ -1,6 +1,6 @@
 export default async function Footer() {
   return (
-    <div className="flex justify-center items-center bg-gradient-to-t from-[#38422C] to-transparent py-4 px-8">
+    <div className="w-full flex justify-center items-center bg-gradient-to-t from-[#38422C] to-transparent py-4 px-8">
       <p className="text-xs text-center text-zinc-300">
         Developed by{' '}
         <a

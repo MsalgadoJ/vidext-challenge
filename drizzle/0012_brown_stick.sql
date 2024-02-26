@@ -1,0 +1,1 @@
+ALTER TABLE "video" ALTER COLUMN "title" SET NOT NULL;

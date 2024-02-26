@@ -13,7 +13,7 @@ export const mockedData = [
   },
   {
     videoId: '3xRXiWsfU1',
-    title: 'Caminades',
+    title: 'Caminandes',
     videoUrl:
       'https://storage.googleapis.com/media-session/caminandes/short.mp4',
     description:

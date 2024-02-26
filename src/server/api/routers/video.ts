@@ -112,6 +112,7 @@ export const videosRouter = createTRPCRouter({
           and(eq(likes.userId, input.userId), eq(likes.videoId, input.videoId))
         );
     }),
+
   deleteVideo: publicProcedure
     .input(z.object({ videoId: z.string() }))
     .mutation(async ({ ctx, input }) => {

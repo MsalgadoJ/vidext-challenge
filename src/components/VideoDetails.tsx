@@ -1,42 +1,36 @@
 'use client';
+import { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import { api } from '@/app/_trpc/Provider';
+import { useSession } from 'next-auth/react';
 import { Button } from './ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2, ThumbsUpIcon } from 'lucide-react';
-import { useRouter, useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+
+interface VideoDetailsProps {
+  title: string;
+  description: string;
+  likesCount: number;
+  playCount: number;
+  hasLikedBefore: boolean;
+}
 
 export default function VideoDetails({
   title,
   description,
   likesCount,
   playCount,
-}) {
-  const [hasLiked, setHasLiked] = useState(false);
-  const session = useSession();
+  hasLikedBefore,
+}: VideoDetailsProps) {
+  const [hasLiked, setHasLiked] = useState(hasLikedBefore);
 
+  const session = useSession();
   const router = useRouter();
   const { id } = useParams();
   const { toast } = useToast();
 
-  const getUserHasLiked = api.videos.getLike.useQuery({
-    videoId: id as string,
-    userId: session.data?.user.id || '',
-  });
-
-  useEffect(() => {
-    console.log('entro al use effect');
-    if (getUserHasLiked.isSuccess && getUserHasLiked.data.length) {
-      setHasLiked(true);
-    } else {
-      setHasLiked(false);
-    }
-  }, [getUserHasLiked.isSuccess, getUserHasLiked.data]);
-
   const updateLikes = api.videos.incrementLikesCount.useMutation({
     onSuccess: (data) => {
-      console.log('encontré data, por');
       if (data) {
         setHasLiked(true);
       } else {
