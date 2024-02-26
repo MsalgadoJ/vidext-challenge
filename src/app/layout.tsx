@@ -5,7 +5,6 @@ import Provider from './_trpc/Provider';
 import Header from '@/components/Hearder';
 import Footer from '@/components/Footer';
 import { Toaster } from '@/components/ui/toaster';
-import { ErrorBoundary } from 'react-error-boundary';
 
 const inter = Inter({ subsets: ['latin'] });
 

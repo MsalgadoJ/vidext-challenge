@@ -38,9 +38,15 @@ export default function Video({ url, thumbnail }) {
           muted
           crossOrigin=""
           onPlay={() => updateCount.mutate({ videoId: id as string })}
+          tabIndex={0}
         />
+        <div className="centered-controls-overlay" slot="centered-chrome">
+          <MediaSeekBackwardButton></MediaSeekBackwardButton>
+          <MediaPlayButton tabIndex={0}></MediaPlayButton>
+          <MediaSeekForwardButton></MediaSeekForwardButton>
+        </div>
         <MediaControlBar>
-          <MediaPlayButton></MediaPlayButton>
+          <MediaPlayButton tabIndex={0}></MediaPlayButton>
           <MediaSeekBackwardButton></MediaSeekBackwardButton>
           <MediaSeekForwardButton></MediaSeekForwardButton>
           <MediaTimeRange></MediaTimeRange>
