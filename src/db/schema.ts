@@ -62,6 +62,7 @@ export const verificationTokens = pgTable(
 
 export const videos = pgTable('video', {
   videoId: text('id').primaryKey(),
+  title: text('title'),
   videoUrl: text('Video Url').notNull(),
   description: text('Description').notNull(),
   thumbnail: text('Thumbnail').notNull(),

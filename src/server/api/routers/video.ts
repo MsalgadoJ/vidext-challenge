@@ -26,17 +26,23 @@ export const videosRouter = createTRPCRouter({
     .input(
       z.object({
         videoId: z.string(),
+        title: z.string(),
         videoUrl: z.string(),
         description: z.string(),
         thumbnail: z.string(),
+        playCount: z.number(),
+        likesCount: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(videos).values({
         videoId: input.videoId,
+        title: input.title,
         videoUrl: input.videoUrl,
         description: input.description,
         thumbnail: input.thumbnail,
+        playCount: input.playCount,
+        likesCount: input.likesCount,
       });
     }),
 
@@ -95,5 +101,23 @@ export const videosRouter = createTRPCRouter({
         .where(eq(videos.videoId, input.videoId));
 
       return newLike;
+    }),
+
+  getLike: publicProcedure
+    .input(z.object({ videoId: z.string(), userId: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db
+        .select()
+        .from(likes)
+        .where(
+          and(eq(likes.userId, input.userId), eq(likes.videoId, input.videoId))
+        );
+    }),
+  deleteVideo: publicProcedure
+    .input(z.object({ videoId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db
+        .delete(videos)
+        .where(eq(videos.videoId, input.videoId));
     }),
 });

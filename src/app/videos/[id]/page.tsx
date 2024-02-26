@@ -17,13 +17,15 @@ export default async function VideoDetail({ params }: TopicShowPageProps) {
   if (!getVideo) {
     return notFound();
   }
-  const { videoUrl, description, thumbnail, playCount, likesCount } = getVideo;
+  const { videoUrl, title, description, thumbnail, playCount, likesCount } =
+    getVideo;
 
   return (
     <div className="pt-4">
       <Video url={videoUrl} thumbnail={thumbnail} />
 
       <VideoDetails
+        title={title}
         description={description}
         likesCount={likesCount}
         playCount={playCount}
