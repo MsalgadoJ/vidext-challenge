@@ -8,7 +8,6 @@ import {
 import { videos, likes } from '@/db/schema';
 import { and, eq } from 'drizzle-orm';
 
-// TODO: take init endpoints to another route
 export const videosRouter = createTRPCRouter({
   getVideos: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.videos.findMany();
