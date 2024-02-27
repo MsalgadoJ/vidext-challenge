@@ -21,8 +21,9 @@ Video player page built as part of the Vidext's hiring process.
 
 - NextJs
 - tRPC
-- Drizzle
 - Next Auth (with Google)
+- Drizzle
+- Neon serverless database
 - Tailwind
 - Chandcn
 - Media-chrome
@@ -93,7 +94,7 @@ The app will be running @ [http://localhost:3000](http://localhost:3000).
 
 ---
 
-Deverloped by [Mayra Rincones](https://www.linkedin.com/in/mayrarincones/) - 2024
+Developed by [Mayra Rincones](https://www.linkedin.com/in/mayrarincones/) - 2024
 
 <br>
 
